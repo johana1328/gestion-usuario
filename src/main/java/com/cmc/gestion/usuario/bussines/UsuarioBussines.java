@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.cmc.gestion.usuario.ControllerException;
 import com.cmc.gestion.usuario.dao.PerfilDao;
 import com.cmc.gestion.usuario.dao.UsuarioDao;
+import com.cmc.gestion.usuario.dto.PaginationResponse;
 import com.cmc.gestion.usuario.dto.PerfilDto;
 import com.cmc.gestion.usuario.dto.UsuarioDto;
 import com.cmc.gestion.usuario.entity.EstadoUsuario;
@@ -103,12 +104,17 @@ public class UsuarioBussines {
 		
 	}
 	
-	public List<UsuarioDto> listarUsuario(int pageSize, int pageKey, String sortBy){
-		
+	public PaginationResponse<UsuarioDto> listarUsuario(int pageSize, int pageKey, String sortBy){
+		PaginationResponse<UsuarioDto> resp = new PaginationResponse<UsuarioDto>();
 		Pageable paginacion = PageRequest.of(pageKey, pageSize,Sort.by(sortBy));
 		Page<Usuario> usuarioPage = usuarioDao.findAll(paginacion);
 		if (usuarioPage.hasContent()) {
-			return buildListUsuario(usuarioPage.getContent());
+			resp.setPageTotal(usuarioPage.getNumberOfElements());
+			resp.setPageSize(pageSize);
+			resp.setPageKey(pageKey+1);
+			List<UsuarioDto> usuarios= buildListUsuario(usuarioPage.getContent());
+			resp.setData(usuarios); 
+			return resp;
 		}else {
 			return null;
 		}
@@ -116,12 +122,17 @@ public class UsuarioBussines {
 		
 	}
 	
-	public List<UsuarioDto> getUsuariosPorFiltro(String id, String nombre, int pageKey, int pageSize, String sortBy){
-		
+	public PaginationResponse<UsuarioDto> getUsuariosPorFiltro(String id, String nombre, int pageKey, int pageSize, String sortBy){
+		PaginationResponse<UsuarioDto> resp = new PaginationResponse<UsuarioDto>();
 		Pageable paginacion = PageRequest.of(pageKey, pageSize);
 		Page<Usuario> usuarioPage = usuarioDao.getUsuariosPorNombres(nombre, id, paginacion);
 		if (usuarioPage.hasContent()) {
-			return buildListUsuario(usuarioPage.getContent());
+			resp.setPageTotal(usuarioPage.getNumberOfElements());
+			resp.setPageSize(pageSize);
+			resp.setPageKey(pageKey+1);
+			List<UsuarioDto> usuarios= buildListUsuario(usuarioPage.getContent());
+			resp.setData(usuarios); 
+			return resp;
 		}else {
 			return null;
 		}
