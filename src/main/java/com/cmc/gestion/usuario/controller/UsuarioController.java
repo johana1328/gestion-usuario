@@ -5,8 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cmc.gestion.usuario.ControllerException;
 import com.cmc.gestion.usuario.bussines.UsuarioBussines;
+import com.cmc.gestion.usuario.dto.PaginationResponse;
 import com.cmc.gestion.usuario.dto.UsuarioDto;
 import com.cmc.gestion.usuario.entity.EstadoUsuario;
 
@@ -30,12 +32,14 @@ public class UsuarioController {
 	UsuarioBussines usuarioBussines;
 	
 	@GetMapping
-	public List<UsuarioDto> listarUsuario(@RequestParam(defaultValue = "1") @Min(1) int pageKey,
+	//@PreAuthorize("hasRole('EMPLEADO')")
+	public PaginationResponse<UsuarioDto> listarUsuario(@RequestParam(defaultValue = "1") @Min(1) int pageKey,
 			@RequestParam(defaultValue = "20") @Min(1) int pageSize,
 			@RequestParam(defaultValue = "idUsuario" ) String sortBy,
 			@RequestParam(name = "filterName",defaultValue = "")String nombre,
-			@RequestParam(name = "filterId",defaultValue = "")String id){
-		
+			@RequestParam(name = "filterId",defaultValue = "")String id,
+			Authentication authentication){
+		System.out.println(authentication.getAuthorities());
 		pageKey = pageKey-1;
 		if ((!nombre.equals(""))|| (!id.equals(""))) {
 			
