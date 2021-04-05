@@ -6,7 +6,7 @@ public class PaginationResponse<T> {
 	private List<T> data;
 	private int pageSize;
 	private int pageKey;
-	private int pageTotal;
+	private long pageTotal;
 	
 	public List<T> getData() {
 		return data;
@@ -27,10 +27,10 @@ public class PaginationResponse<T> {
 	public void setPageKey(int pageKey) {
 		this.pageKey = pageKey;
 	}
-	public int getPageTotal() {
+	public long getPageTotal() {
 		return pageTotal;
 	}
-	public void setPageTotal(int pageTotal) {
+	public void setPageTotal(long pageTotal) {
 		this.pageTotal = pageTotal;
 	}
 	

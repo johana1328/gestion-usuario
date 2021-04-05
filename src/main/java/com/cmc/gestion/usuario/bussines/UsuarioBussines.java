@@ -109,7 +109,7 @@ public class UsuarioBussines {
 		Pageable paginacion = PageRequest.of(pageKey, pageSize,Sort.by(sortBy));
 		Page<Usuario> usuarioPage = usuarioDao.findAll(paginacion);
 		if (usuarioPage.hasContent()) {
-			resp.setPageTotal(usuarioPage.getNumberOfElements());
+			resp.setPageTotal(usuarioPage.getTotalPages());
 			resp.setPageSize(pageSize);
 			resp.setPageKey(pageKey+1);
 			List<UsuarioDto> usuarios= buildListUsuario(usuarioPage.getContent());
@@ -127,7 +127,7 @@ public class UsuarioBussines {
 		Pageable paginacion = PageRequest.of(pageKey, pageSize);
 		Page<Usuario> usuarioPage = usuarioDao.getUsuariosPorNombres(nombre, id, paginacion);
 		if (usuarioPage.hasContent()) {
-			resp.setPageTotal(usuarioPage.getNumberOfElements());
+			resp.setPageTotal(usuarioPage.getTotalPages()); 
 			resp.setPageSize(pageSize);
 			resp.setPageKey(pageKey+1);
 			List<UsuarioDto> usuarios= buildListUsuario(usuarioPage.getContent());
@@ -137,6 +137,32 @@ public class UsuarioBussines {
 			return null;
 		}
 	}
+	
+	public List<UsuarioDto> getUsuariosPorFiltro(String estado, String nombre){
+		List<Usuario> listaBd = null;
+		if(estado.equals("") && nombre.equals("")) {
+			listaBd=(List<Usuario>) usuarioDao.findAll();		
+		}else {
+			listaBd = usuarioDao.getUsuariosReporte(nombre, estado);
+		}
+		if(!listaBd.isEmpty()) {
+			List<UsuarioDto> usuarios= buildListUsuario(listaBd);
+			return usuarios;
+		}else {
+			return null;
+		}
+	}
+	
+	public List<UsuarioDto> getAllUsers(){
+		List<Usuario> listaUsuario=(List<Usuario>)this.usuarioDao.getAllUsuarios();
+		if(!listaUsuario.isEmpty()) {
+			List<UsuarioDto> usuarios= buildListUsuario(listaUsuario);
+			return usuarios;
+		}else {
+			return null;
+		}
+	}
+	
 	
 	private List<UsuarioDto> buildListUsuario(List<Usuario> listUsuarioEntity){
 		List<UsuarioDto> resp= new ArrayList<UsuarioDto>();
