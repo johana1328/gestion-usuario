@@ -75,6 +75,6 @@ public class UsuarioController {
 	public void cambiarEstadoUsuario(@PathVariable String id, @PathVariable EstadoUsuario estado) {
 		usuarioBussines.cambiarEstadoUsuario(estado, id);
 
-	}
+	} 
 
 }
