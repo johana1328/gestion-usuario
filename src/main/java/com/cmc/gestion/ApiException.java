@@ -1,4 +1,4 @@
-package com.cmc.gestion.usuario;
+package com.cmc.gestion;
 
 import java.util.List;
 

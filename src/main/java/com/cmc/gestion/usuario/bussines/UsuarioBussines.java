@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.cmc.gestion.usuario.ControllerException;
+import com.cmc.gestion.ControllerException;
 import com.cmc.gestion.usuario.dao.PerfilDao;
 import com.cmc.gestion.usuario.dao.UsuarioDao;
 import com.cmc.gestion.usuario.dto.PaginationResponse;
@@ -67,7 +67,6 @@ public class UsuarioBussines {
 			usuEntity.setApellidos(usuario.getApellidos());
 			usuEntity.setArea(usuario.getArea());
 			usuEntity.setUsuario(usuario.getCorreoElectronico());
-			usuEntity.setContrasena(usuario.getContrasena());
 			usuEntity.setCorreoElectronico(usuario.getCorreoElectronico());
 			usuEntity.setJefe(usuario.getJefe());
 			usuEntity.setEstado(EstadoUsuario.USACT);
@@ -153,6 +152,15 @@ public class UsuarioBussines {
 		}
 	}
 	
+	public UsuarioDto getUsuarioById(String id) {
+	    Optional<Usuario> optionalUsuario = usuarioDao.findById(id);
+	    if (optionalUsuario.isPresent()) {
+	    	UsuarioDto resp = buildUsuario(optionalUsuario.get());
+	    	 return resp;
+		}
+	    return null;
+	}
+	
 	public List<UsuarioDto> getAllUsers(){
 		List<Usuario> listaUsuario=(List<Usuario>)this.usuarioDao.getAllUsuarios();
 		if(!listaUsuario.isEmpty()) {
@@ -191,6 +199,31 @@ public class UsuarioBussines {
 		return resp;
 		
 	}
+
+	private UsuarioDto buildUsuario(Usuario in){
+			UsuarioDto usuario = new UsuarioDto();
+			usuario.setApellidos(in.getApellidos());
+			usuario.setArea(in.getArea());
+			usuario.setEstado(in.getEstado());
+			usuario.setCorreoElectronico(in.getCorreoElectronico());
+			usuario.setIdUsuario(in.getIdUsuario());
+			usuario.setJefe(in.getJefe());
+			usuario.setNombres(in.getNombres());
+			usuario.setUsuario(in.getCorreoElectronico());
+			
+			List<PerfilDto> listPerfil = new ArrayList<PerfilDto>();
+			for(Perfil inPerfil: in.getUsPerfils()) {
+				PerfilDto perfil = new PerfilDto();
+				perfil.setCodigoPerfil(inPerfil.getCodigoPerfil());
+				perfil.setGrupoPerfil(inPerfil.getGrupoPerfil());
+				perfil.setNombre(inPerfil.getNombre());
+				listPerfil.add(perfil);
+			}
+			usuario.setUsPerfils(listPerfil);
+				return usuario;
+		
+	}
 	
 
 }
+

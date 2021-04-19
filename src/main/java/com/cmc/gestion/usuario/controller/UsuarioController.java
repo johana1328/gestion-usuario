@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cmc.gestion.usuario.ControllerException;
+import com.cmc.gestion.ControllerException;
 import com.cmc.gestion.usuario.bussines.UsuarioBussines;
 import com.cmc.gestion.usuario.dto.PaginationResponse;
 import com.cmc.gestion.usuario.dto.UsuarioDto;
@@ -70,6 +70,13 @@ public class UsuarioController {
 	public void modificarUsuario(@Valid @RequestBody UsuarioDto usuario, @PathVariable String id) {
 		usuarioBussines.modificarUsuario(usuario);
 	}
+	
+	@GetMapping("/{id}")
+	public UsuarioDto getUsuarioById(@PathVariable String id) {
+		UsuarioDto resp = usuarioBussines.getUsuarioById(id);
+		return resp;	
+	}
+	
 
 	@PutMapping(path = "/activar/{id}/{estado}")
 	public void cambiarEstadoUsuario(@PathVariable String id, @PathVariable EstadoUsuario estado) {

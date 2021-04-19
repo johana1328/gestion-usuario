@@ -1,4 +1,4 @@
-package com.cmc.gestion.usuario;
+package com.cmc.gestion;
 import java.io.IOException;
 
 import javax.servlet.Filter;

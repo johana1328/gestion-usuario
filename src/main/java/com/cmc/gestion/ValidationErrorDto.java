@@ -1,4 +1,4 @@
-package com.cmc.gestion.usuario;
+package com.cmc.gestion;
 
 public class ValidationErrorDto {
 	private String error;
